@@ -6,14 +6,14 @@ Express + PM2 + Mysql + Redis
 
 ## 项目介绍
 
-1. 实现了基础的Dao层，增删改查方法。[BaseDao](./common/BaseDao.js)
-2. 实现了路由自动注入的功能。[Routers](~/routers/index.js)
-3. 实现了dto的封装。[DataTransferObject](./common/DataTransferObject.js)
-4. 实现了分页的封装。[Pagination](./common/Pagination.js)
-5. 实现了validate校验工具。[Utils](./plugins/Utils.js)
+1. 实现基础的Dao层，增删改查方法。[BaseDao](./common/BaseDao.js)
+2. 实现路由自动注入的功能。[Routers](~/routers/index.js)
+3. 响应dto的封装。[DataTransferObject](./common/DataTransferObject.js)
+4. 分页的封装。[Pagination](./common/Pagination.js)
+5. 实现validate校验工具。[Utils](./plugins/Utils.js)
 6. 数据库连接的封装。[DB](./plugins/DB.js)
-7. Redis的封装。LRedis (TODO)
-8. 
+7. 实现Redis的封装。LRedis (TODO)
+8. 实现Model的基础封装。[Base](./common/Base.js)
 
 ## 目录结构
 
