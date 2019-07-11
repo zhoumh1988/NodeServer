@@ -1,13 +1,15 @@
 # Server服务
 
 ## 依赖
-### Express
 
-### PM2
+Express + PM2 + Mysql + Redis
 
-### Mysql
+## 项目介绍
 
-### Redis
+1. 实现了基础的Dao层，增删改查方法。（~/common/BaseDao.js)
+2. 实现了路由自动注入的功能。（~/routers/index.js)
+3. 实现了dto和pagination的封装。
+4. 实现了validate校验工具。
 
 ## 目录结构
 
