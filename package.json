@@ -1,0 +1,23 @@
+{
+  "name": "server",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www",
+    "pm2": "pm2 start ecosystem.config.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "express-session": "^1.16.2",
+    "http-errors": "~1.6.3",
+    "jsmicro-is-empty": "^1.0.1",
+    "moment": "^2.22.2",
+    "morgan": "~1.9.1",
+    "mysql": "^2.17.1",
+    "parseurl": "^1.3.3",
+    "redis": "^2.8.0"
+  }
+}
