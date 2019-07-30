@@ -1,5 +1,5 @@
 const { execute } = require('../plugins/DB');
-const { isEmpty } = require('../plugins/Utils');
+const { isEmpty, handleDataToCamel, handleDatatoLowerLine } = require('../plugins/Utils');
 
 /**
  * Dao基础类
@@ -16,8 +16,9 @@ class BaseDao {
     /**
      * @param {String} tableName 表名
      */
-    constructor(tableName) {
+    constructor(tableName, baseResultMap = "*") {
         this.tableName = tableName;
+        this.baseResultMap = baseResultMap;
     }
 
     /**
@@ -35,8 +36,8 @@ class BaseDao {
      * @param {Number|String} id 唯一标识
      */
     async selectByPrimaryKey(id) {
-        const rowData = await execute(`SELECT * FROM ${this.tableName} WHERE id = ?`, [id]);
-        return rowData.length > 0 ? rowData[0] : false;
+        const rowData = await execute(`SELECT ${this.baseResultMap} FROM ${this.tableName} WHERE id = ?`, [id]);
+        return rowData.length > 0 ? handleDataToCamel(rowData[0]) : false;
     }
 
     /**
@@ -44,6 +45,7 @@ class BaseDao {
      * @param {JSON} record 需要更新的字段
      */
     async updateByPrimaryKey(record) {
+        record = handleDatatoLowerLine(record);
         const keys = Object.keys(record);
         const toUpdate = keys.filter(key => key !== 'id');
         const params = toUpdate.map(key => record[key]);
@@ -69,7 +71,8 @@ class BaseDao {
      * 查询全部列表
      */
     async listAll() {
-        return await execute(`SELECT * FROM ${this.tableName}`);
+        const list = await execute(`SELECT ${this.baseResultMap} FROM ${this.tableName}`);
+        return list ? handleDataToCamel(list) : list;
     }
 
     /**
@@ -77,9 +80,11 @@ class BaseDao {
      * @param {JSON} query 查询条件
      */
     async listByQuery(query = { 1: 1 }) {
+        if (isEmpty(query)) query = { 1: 1 };
         const keys = Object.keys(query);
         const params = keys.map(key => query[key]);
-        return await execute(`SELECT * FROM ${this.tableName} WHERE ${keys.map(key => `${key} = ?`).join(' AND ')}`, params);
+        const list = await execute(`SELECT ${this.baseResultMap} FROM ${this.tableName} WHERE ${keys.map(key => `${key} = ?`).join(' AND ')}`, params);
+        return list ? handleDataToCamel(list) : list;
     }
 
     /**
@@ -88,14 +93,13 @@ class BaseDao {
      * @param {JSON} query 查询条件
      */
     async pageByQuery({ pageNo, pageSize, sortorder, sortdesc = 'DESC' }, query = { 1: 1 }) {
+        if (isEmpty(query)) query = { 1: 1 };
+        query = handleDatatoLowerLine(query);
         const keys = Object.keys(query);
         const params = keys.map(key => query[key]);
         const limit = [(pageNo - 1) * pageSize, pageSize];
-        if (keys.length > 0) {
-            return await execute(`SELECT * FROM ${this.tableName} WHERE ${keys.map(key => `${key} = ?`).join(' AND ')} ${sortorder && ` ORDER BY ${sortorder} ${sortdesc}`} LIMIT ?,?`, params.concat(limit));
-        } else {
-            return await execute(`SELECT * FROM ${this.tableName} ${sortorder && ` ORDER BY ${sortorder} ${sortdesc}`} LIMIT ?,?`, params.concat(limit));
-        }
+        const list = await execute(`SELECT ${this.baseResultMap} FROM ${this.tableName} WHERE ${keys.map(key => `${key} = ?`).join(' AND ')} ${sortorder && ` ORDER BY ${sortorder} ${sortdesc}`} LIMIT ?,?`, params.concat(limit));
+        return list ? handleDataToCamel(list) : list;
     }
 
     /**
@@ -103,14 +107,11 @@ class BaseDao {
      * @param {JSON} query 查询条件
      */
     async countByQuery(query = { 1: 1 }) {
+        if (isEmpty(query)) query = { 1: 1 };
+        query = handleDatatoLowerLine(query);
         const keys = Object.keys(query);
-        if (keys.length > 0) {
-            const res = await execute(`SELECT COUNT(1) AS total FROM ${this.tableName} WHERE ${keys.map(key => `${key} = ?`).join(' AND ')}`, keys.map(key => query[key]));
-            return res[0].total;
-        } else {
-            const res = await execute(`SELECT COUNT(1) AS total FROM ${this.tableName}`, keys.map(key => query[key]));
-            return res[0].total;
-        }
+        const res = await execute(`SELECT COUNT(1) AS total FROM ${this.tableName} WHERE ${keys.map(key => `${key} = ?`).join(' AND ')}`, keys.map(key => query[key]));
+        return res[0].total;
     }
 }
 

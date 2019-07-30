@@ -57,8 +57,6 @@ const execute = (sql, params) => {
   if (params) {
     sql = format(sql, params);
   }
-  console.log('-------------------lllllll---------------ł')
-    console.log(sql)
   return _pool_connection(sql);
 }
 

@@ -20,7 +20,7 @@ Express + PM2 + Mysql + Redis
 ```
 .
 ├── _bin
-├── └── www                     // 主进程入口
+├── └── www                     // 启动指令
 ├── _common                     // 基础类
 ├── └── Base.js                 // 模型基础类
 ├── └── BaseDao.js              // Dao基础类
@@ -37,7 +37,7 @@ Express + PM2 + Mysql + Redis
 ├── └── index.js                // 自动注入路由配置
 ├── _services                   // 服务层
 ├── .gitignore                  // git忽略
-├── app.js                      // app
+├── app.js                      // 主进程入口
 ├── config.js                   // 服务配置
 ├── ecosystem.config.js         // pm2配置
 ├── package.json                // Node依赖

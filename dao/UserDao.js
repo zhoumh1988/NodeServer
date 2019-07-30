@@ -4,7 +4,7 @@ const BaseDao = require('../common/BaseDao');
 class UserDao extends BaseDao {
 
     constructor() {
-        super('user');
+        super('user', 'id, account, email, last_login, status, updated, created');
     }
 
     static getInstance() {

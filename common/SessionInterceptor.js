@@ -21,7 +21,7 @@ const interceptors = {
     /* 排除 */
     excludes: [
         '/api/login',
-        '/api/logout'
+        '/api/logout',
     ]
 }
 const SessionInterceptor = (req, res, next) => {
@@ -30,7 +30,11 @@ const SessionInterceptor = (req, res, next) => {
     req.session.lastPage = request.pathname;
     if (interceptors.excludes.indexOf(request.pathname) === -1 && isEmpty(req.session.user)) {
         // 未登录判断
-        res.json(DTO.NOT_LOGIN_ERR);
+        if(request.pathname.startsWith('/api')) {
+            res.json(DTO.NOT_LOGIN_ERR);
+        } else {
+            res.redirect("/")
+        }
     } else {
         // 刷新session过期时间
         req.session._garbage = Date();
