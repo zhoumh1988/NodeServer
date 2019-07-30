@@ -14,7 +14,7 @@ module.exports = {
       "pid_file": "./pids/node-geo-api.pid",// 进程id存储
       "min_uptime": "200s",// 重启最大时间200s
       "max_restarts": 10,// 重启最大次数10次
-      "max_memory_restart": "150M",// 服务最大缓存150M
+      "max_memory_restart": "1G",// 服务最大缓存150M
       "cron_restart": "0 3 * * * *",// 每天3点重启服务，解决需要重启才能恢复的问题。
       "watch": [ // 动态监听服务变化重启项目
         "bin",
@@ -31,7 +31,7 @@ module.exports = {
       ],
       "merge_logs": true,
       "exec_interpreter": "node",
-      "exec_mode": "fork",
+      "exec_mode": "cluster",
       "autorestart": false,
       "vizion": false,
       "env": {
