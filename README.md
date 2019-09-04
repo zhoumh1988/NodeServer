@@ -27,6 +27,9 @@ Express + PM2 + Mysql + Redis
 ├── └── DataTransferObject.js   // 响应数据封装类
 ├── └── Pagination.js           // 分页数据封装类
 ├── └── SessionInterceptor.js   // Session登录拦截器
+├── _config
+├── └── log4js.json             // log4js日志配置文件
+├── └── index.js                // 服务配置
 ├── _dao                        // 数据库交互类
 ├── _logs                       // 日志
 ├── _models                     // 模型类
@@ -38,15 +41,22 @@ Express + PM2 + Mysql + Redis
 ├── _services                   // 服务层
 ├── .gitignore                  // git忽略
 ├── app.js                      // 主进程入口
-├── config.js                   // 服务配置
 ├── ecosystem.config.js         // pm2配置
 ├── package.json                // Node依赖
 └── README.md                   // 项目介绍
 ```
 
+## 项目部署
+```ssh
+# 安装pm2依赖
+npm install pm2 -g
+# 安装pm2-logrotate依赖
+pm2 install pm2-logrotate
+# 加载项目依赖包
+npm install
+```
+
 ## 启动项目
 ```ssh
-npm install
-
 npm run pm2
 ```
