@@ -3,15 +3,18 @@ const createError = require('http-errors');
 const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const logger = require('morgan');
 const session = require('express-session');
 const SessionInterceptor = require('./common/SessionInterceptor')
 const DTO = require('./common/DataTransferObject');
 const routers = require('./routers');
-const app = express();
 const parseurl = require('parseurl');
+const log4js = require('log4js');
 
-app.use(logger('dev'));
+const app = express();
+
+const log = log4js.getLogger("app");
+
+app.use(log4js.connectLogger(log4js.getLogger("http"), { level: 'auto' }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -48,7 +51,7 @@ routers(app);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   const request = parseurl(req);
-  if(request.pathname.startsWith('/api')) {
+  if (request.pathname.startsWith('/api')) {
     next(createError(404));
   } else {
     res.sendFile(path.join(__dirname, "html/index.html"));
@@ -57,7 +60,7 @@ app.use(function (req, res, next) {
 
 // error handler
 app.use(function (err, req, res, next) {
-  console.log(err);
+  log.error("Something went wrong:", err);
   const dto = new DTO();
   dto.setCode(err.status);
   dto.setMsg(err.message);
